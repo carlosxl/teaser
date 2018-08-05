@@ -30,8 +30,8 @@ class MyApp extends StatelessWidget {
           title: new Text('贵金属行情'),
         ),
         body: new ListView(
-          children:
-              new List<Widget>.generate(30, (int index) => new MarketDataRow()),
+          children: new List<Widget>.generate(
+              30, (int index) => new MarketDataRow(index)),
         ),
       ),
     );
@@ -39,17 +39,35 @@ class MyApp extends StatelessWidget {
 }
 
 class MarketDataRow extends StatelessWidget {
+  final int index;
+
+  MarketDataRow(this.index);
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return new Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: <Widget>[
-        new ContractName('Gold', '伦敦金'),
-        new PriceColumn(1266.102, 1255.222, '最低价'),
-        new PriceColumn(1266.532, 1275.232, '最高价'),
-      ],
+    return new Container(
+      padding: EdgeInsets.fromLTRB(
+          0.0, index == 0 ? 10.0 : 5.0, 0.0, index == 29 ? 10.0 : 5.0),
+      child: new Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: <Widget>[
+          new Expanded(
+              child: new Container(
+            padding: EdgeInsets.only(left: 15.0),
+            child: new ContractName('GOLD', '伦敦金'),
+          )),
+          new Container(
+            padding: EdgeInsets.symmetric(horizontal: 30.0),
+            child: new PriceColumn(1266.102, 1255.222, '最低价'),
+          ),
+          new Container(
+            padding: EdgeInsets.symmetric(horizontal: 15.0),
+            child: new PriceColumn(1266.532, 1275.232, '最高价'),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -72,7 +90,7 @@ class ContractName extends StatelessWidget {
         ),
         new Text(
           _nameChi,
-          style: new TextStyle(fontSize: 14.0, color: Colors.grey),
+          style: new TextStyle(fontSize: 12.0, color: Colors.grey),
         ),
       ],
     );
@@ -95,7 +113,10 @@ class PriceColumn extends StatelessWidget {
         new MainPrice(_mainPrice.toString()),
         new Text(
           _bottomPriceLabel + ': ' + _bottomPrice.toString(),
-          style: new TextStyle(color: Colors.black87),
+          style: new TextStyle(
+            color: Colors.black87,
+            fontSize: 12.0,
+          ),
         ),
       ],
     );
@@ -124,6 +145,7 @@ class MainPrice extends StatelessWidget {
               splited.prefix,
               style: new TextStyle(
                 color: color,
+                fontSize: 18.0,
               ),
             ),
             new Text(
@@ -136,11 +158,12 @@ class MainPrice extends StatelessWidget {
           ],
         ),
         new Container(
-          padding: EdgeInsets.only(top: 2.0),
+          // padding: EdgeInsets.only(top: 2.0),
           child: new Text(
             splited.suffix,
             style: new TextStyle(
               color: color,
+              fontSize: 18.0,
             ),
           ),
         )
