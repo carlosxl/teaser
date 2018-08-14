@@ -7,6 +7,7 @@ class PricesState {
         contractPrices: <ContractPrice>[
           ContractPrice(
             contractName: 'EURUSD',
+            contractNameLocal: '歐元美元',
             bid: '1.22233',
             ask: '1.33322',
             high: '1.44444',
@@ -14,6 +15,7 @@ class PricesState {
           ),
           ContractPrice(
             contractName: 'CADUSD',
+            contractNameLocal: '加元美元',
             bid: '1.22233',
             ask: '1.33322',
             high: '1.44444',
@@ -21,6 +23,7 @@ class PricesState {
           ),
           ContractPrice(
             contractName: 'AUDUSD',
+            contractNameLocal: '澳元美元',
             bid: '1.22233',
             ask: '1.33322',
             high: '1.44444',
@@ -31,10 +34,11 @@ class PricesState {
 }
 
 class ContractPrice {
-  final String contractName, bid, ask, high, low;
+  final String contractName, contractNameLocal, bid, ask, high, low;
 
   ContractPrice({
     this.contractName,
+    this.contractNameLocal,
     this.bid = '0.000',
     this.ask = '0.000',
     this.high = '0.000',

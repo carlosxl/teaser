@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
 import 'models/zoomed_price.dart';
@@ -24,46 +25,50 @@ class MyApp extends StatelessWidget {
 
   MyApp({Key key, this.store}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-      title: 'Flutter Demo',
-      theme: new ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or press Run > Flutter Hot Reload in IntelliJ). Notice that the
-        // counter didn't reset back to zero; the application is not restarted.
-        primarySwatch: Colors.deepOrange,
-      ),
-      home: new Scaffold(
-        appBar: new AppBar(
-          title: new Text('贵金属行情'),
+    return new StoreProvider<PricesState>(
+      store: store,
+      child: new MaterialApp(
+        title: 'Flutter Demo',
+        theme: new ThemeData(
+          primarySwatch: Colors.deepOrange,
         ),
-        body: new ListView(
-          children: new List<Widget>.generate(
-              30, (int index) => new MarketDataRow(index)),
+        home: new Scaffold(
+          appBar: new AppBar(
+            title: new Text('贵金属行情'),
+          ),
+          body: new MarketDataScreen(),
         ),
       ),
     );
   }
 }
 
-class MarketDataRow extends StatelessWidget {
-  final int index;
+class MarketDataScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return new StoreConnector<PricesState, List<ContractPrice>>(
+        converter: (store) => store.state.contractPrices,
+        builder: (BuildContext context, List<ContractPrice> contractPrices) {
+          return new ListView(
+            children: contractPrices
+                .map((contractPrice) => MarketDataRow(contractPrice))
+                .toList(),
+          );
+        });
+  }
+}
 
-  MarketDataRow(this.index);
+class MarketDataRow extends StatelessWidget {
+  final ContractPrice contractPrice;
+
+  MarketDataRow(this.contractPrice);
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return new Container(
-      padding: EdgeInsets.fromLTRB(
-          0.0, index == 0 ? 10.0 : 5.0, 0.0, index == 29 ? 10.0 : 5.0),
+      padding: EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
       child: new Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -71,15 +76,17 @@ class MarketDataRow extends StatelessWidget {
           new Expanded(
               child: new Container(
             padding: EdgeInsets.only(left: 15.0),
-            child: new ContractName('GOLD', '伦敦金'),
+            child: new ContractName(
+                contractPrice.contractName, contractPrice.contractNameLocal),
           )),
           new Container(
             padding: EdgeInsets.symmetric(horizontal: 30.0),
-            child: new PriceColumn(1266.102, 1255.222, '最低价'),
+            child: new PriceColumn(contractPrice.bid, contractPrice.low, '最低价'),
           ),
           new Container(
             padding: EdgeInsets.symmetric(horizontal: 15.0),
-            child: new PriceColumn(1266.532, 1275.232, '最高价'),
+            child:
+                new PriceColumn(contractPrice.ask, contractPrice.high, '最高价'),
           ),
         ],
       ),
@@ -113,9 +120,9 @@ class ContractName extends StatelessWidget {
 }
 
 class PriceColumn extends StatelessWidget {
-  final double _mainPrice;
+  final String _mainPrice;
 
-  final double _bottomPrice;
+  final String _bottomPrice;
   final String _bottomPriceLabel;
 
   PriceColumn(this._mainPrice, this._bottomPrice, this._bottomPriceLabel);
@@ -125,9 +132,9 @@ class PriceColumn extends StatelessWidget {
     return new Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
-        new MainPrice(_mainPrice.toString()),
+        new MainPrice(_mainPrice),
         new Text(
-          _bottomPriceLabel + ': ' + _bottomPrice.toString(),
+          _bottomPriceLabel + ': ' + _bottomPrice,
           style: new TextStyle(
             color: Colors.black87,
             fontSize: 12.0,
@@ -173,7 +180,6 @@ class MainPrice extends StatelessWidget {
           ],
         ),
         new Container(
-          // padding: EdgeInsets.only(top: 2.0),
           child: new Text(
             splited.suffix,
             style: new TextStyle(
