@@ -1,14 +1,29 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:redux/redux.dart';
 
 import 'models/zoomed_price.dart';
+import 'redux.dart';
 
 var rng = new Random();
 
-void main() => runApp(new MyApp());
+void main() {
+  final store = new Store<PricesState>(
+    reducer,
+    initialState: PricesState.initial(),
+  );
+
+  runApp(new MyApp(
+    store: store,
+  ));
+}
 
 class MyApp extends StatelessWidget {
+  final Store<PricesState> store;
+
+  MyApp({Key key, this.store}) : super(key: key);
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
