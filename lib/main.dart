@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -25,6 +26,17 @@ class MyApp extends StatelessWidget {
 
   MyApp({Key key, this.store}) : super(key: key);
 
+  Future<Null> _handleRefresh(Store store) {
+    final Completer<Null> completer = new Completer<Null>();
+    new Timer(const Duration(seconds: 3), () {
+      completer.complete(null);
+    });
+
+    store.dispatch(Actions.Refresh);
+
+    return completer.future;
+  }
+
   @override
   Widget build(BuildContext context) {
     return new StoreProvider<PricesState>(
@@ -35,11 +47,20 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.deepOrange,
         ),
         home: new Scaffold(
-          appBar: new AppBar(
-            title: new Text('贵金属行情'),
-          ),
-          body: new MarketDataScreen(),
-        ),
+            appBar: new AppBar(
+              title: new Text('贵金属行情'),
+            ),
+            body: new StoreConnector<PricesState, dynamic>(
+              converter: (Store store) {
+                return () => _handleRefresh(store);
+              },
+              builder: (context, callback) {
+                return RefreshIndicator(
+                  onRefresh: callback,
+                  child: new MarketDataScreen(),
+                );
+              },
+            )),
       ),
     );
   }
