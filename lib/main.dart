@@ -69,12 +69,15 @@ class MyApp extends StatelessWidget {
 class MarketDataScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new StoreConnector<PricesState, List<ContractPrice>>(
+    return new StoreConnector<PricesState, Map<String, ContractPrice>>(
         converter: (store) => store.state.contractPrices,
-        builder: (BuildContext context, List<ContractPrice> contractPrices) {
+        builder:
+            (BuildContext context, Map<String, ContractPrice> contractPrices) {
           return new ListView(
             children: contractPrices
-                .map((contractPrice) => MarketDataRow(contractPrice))
+                .map((k, contractPrice) =>
+                    MapEntry(k, MarketDataRow(contractPrice)))
+                .values
                 .toList(),
           );
         });
@@ -102,12 +105,13 @@ class MarketDataRow extends StatelessWidget {
           )),
           new Container(
             padding: EdgeInsets.symmetric(horizontal: 30.0),
-            child: new PriceColumn(contractPrice.bid, contractPrice.low, '最低价'),
+            child: new PriceColumn(contractPrice.bid, contractPrice.low, '最低价',
+                contractPrice.tickDiff),
           ),
           new Container(
             padding: EdgeInsets.symmetric(horizontal: 15.0),
-            child:
-                new PriceColumn(contractPrice.ask, contractPrice.high, '最高价'),
+            child: new PriceColumn(contractPrice.ask, contractPrice.high, '最高价',
+                contractPrice.tickDiff),
           ),
         ],
       ),
@@ -145,15 +149,17 @@ class PriceColumn extends StatelessWidget {
 
   final String _bottomPrice;
   final String _bottomPriceLabel;
+  final TickDiff _tickDiff;
 
-  PriceColumn(this._mainPrice, this._bottomPrice, this._bottomPriceLabel);
+  PriceColumn(this._mainPrice, this._bottomPrice, this._bottomPriceLabel,
+      this._tickDiff);
 
   @override
   Widget build(BuildContext context) {
     return new Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
-        new MainPrice(_mainPrice),
+        new MainPrice(_mainPrice, _tickDiff),
         new Text(
           _bottomPriceLabel + ': ' + _bottomPrice,
           style: new TextStyle(
@@ -171,9 +177,11 @@ class MainPrice extends StatelessWidget {
   final SplitedPrice splited;
   final Color color;
 
-  MainPrice(this.price)
+  MainPrice(this.price, tickDiff)
       : splited = SplitedPrice(price),
-        color = rng.nextInt(2) == 0 ? Colors.red : Colors.green;
+        color = tickDiff == TickDiff.NotChanged
+            ? Colors.grey
+            : tickDiff == TickDiff.Increased ? Colors.red : Colors.green;
 
   @override
   Widget build(BuildContext context) {

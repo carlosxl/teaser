@@ -3,56 +3,59 @@ import 'dart:math';
 var random = Random();
 
 enum Actions { Refresh }
+enum TickDiff { Increased, Decreased, NotChanged }
+
+const contracts = [
+  ['EURUSD', '歐元美元'],
+  ['CADUSD', '加元美元'],
+  ['AUDUSD', '澳元美元'],
+];
 
 class PricesState {
-  final List<ContractPrice> contractPrices;
+  final Map<String, ContractPrice> contractPrices;
 
   PricesState({this.contractPrices});
 
-  factory PricesState.initial() => PricesState(
-        contractPrices: <ContractPrice>[
-          ContractPrice.random(
-            contractName: 'EURUSD',
-            contractNameLocal: '歐元美元',
-          ),
-          ContractPrice.random(
-            contractName: 'CADUSD',
-            contractNameLocal: '加元美元',
-          ),
-          ContractPrice.random(
-            contractName: 'AUDUSD',
-            contractNameLocal: '澳元美元',
-          ),
-        ],
+  factory PricesState.initial() {
+    Map<String, ContractPrice> _contractPrices = {};
+    for (List<String> pair in contracts) {
+      _contractPrices[pair[0]] = ContractPrice.random(
+        contractName: pair[0],
+        contractNameLocal: pair[1],
       );
+    }
+    return PricesState(contractPrices: _contractPrices);
+  }
 
   factory PricesState.randomTick(PricesState prev) {
-    List<ContractPrice> newContractPrices = [];
+    Map<String, ContractPrice> newContractPrices = {};
     bool changed;
 
-    for (ContractPrice p in prev.contractPrices) {
+    prev.contractPrices.forEach((k, v) {
       changed = random.nextBool();
 
       if (changed) {
-        newContractPrices.add(ContractPrice.nextTick(prev: p));
+        newContractPrices[k] = ContractPrice.nextTick(prev: v);
       } else {
-        newContractPrices.add(p);
+        newContractPrices[k] = v;
       }
-    }
+    });
 
     return PricesState(contractPrices: newContractPrices);
   }
 }
 
 class ContractPrice {
-  final String contractName, contractNameLocal;
-  final double _bid, _high, _low;
   static const double basicMean = 1.0000;
   static const double floatMean = 0.5;
   static const double variance = 0.05;
   static const double spread = 0.0004;
   static const double tickDiffMean = 0.0003;
   static const int fixedDigits = 5;
+
+  final String contractName, contractNameLocal;
+  final double _bid, _high, _low;
+  final TickDiff tickDiff;
 
   get bid => _bid.toStringAsFixed(5);
   get ask => (_bid + spread).toStringAsFixed(fixedDigits);
@@ -65,6 +68,7 @@ class ContractPrice {
     this._low, {
     this.contractName,
     this.contractNameLocal,
+    this.tickDiff = TickDiff.NotChanged,
   });
 
   factory ContractPrice.random(
@@ -87,7 +91,9 @@ class ContractPrice {
 
   factory ContractPrice.nextTick({ContractPrice prev}) {
     double diff = tickDiffMean * (random.nextDouble() - 0.5);
-    double bid = double.parse(prev.bid), high = double.parse(prev.high), low = double.parse(prev.low);
+    double bid = double.parse(prev.bid),
+        high = double.parse(prev.high),
+        low = double.parse(prev.low);
 
     bid = bid + diff;
     high = bid > high ? bid : high;
@@ -99,8 +105,12 @@ class ContractPrice {
       low,
       contractName: prev.contractName,
       contractNameLocal: prev.contractNameLocal,
+      tickDiff: diff > 0
+          ? TickDiff.Increased
+          : (diff == 0 ? TickDiff.NotChanged : TickDiff.Decreased),
     );
   }
 }
 
-PricesState reducer(PricesState state, dynamic action) => PricesState.randomTick(state);
+PricesState reducer(PricesState state, dynamic action) =>
+    PricesState.randomTick(state);
