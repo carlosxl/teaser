@@ -13,8 +13,9 @@ const contracts = [
 
 class PricesState {
   final Map<String, ContractPrice> contractPrices;
+  final Map<String, ContractPrice> prevContractPrices;
 
-  PricesState({this.contractPrices});
+  PricesState({this.contractPrices, this.prevContractPrices});
 
   factory PricesState.initial() {
     Map<String, ContractPrice> _contractPrices = {};
@@ -37,11 +38,14 @@ class PricesState {
       if (changed) {
         newContractPrices[k] = ContractPrice.nextTick(prev: v);
       } else {
-        newContractPrices[k] = v;
+        newContractPrices[k] = ContractPrice.copy(prev: v);
       }
     });
 
-    return PricesState(contractPrices: newContractPrices);
+    return PricesState(
+      contractPrices: newContractPrices,
+      prevContractPrices: prev.contractPrices,
+    );
   }
 }
 
@@ -108,6 +112,20 @@ class ContractPrice {
       tickDiff: diff > 0
           ? TickDiff.Increased
           : (diff == 0 ? TickDiff.NotChanged : TickDiff.Decreased),
+    );
+  }
+
+  factory ContractPrice.copy({ContractPrice prev}) {
+    double bid = double.parse(prev.bid),
+        high = double.parse(prev.high),
+        low = double.parse(prev.low);
+
+    return ContractPrice(
+      bid,
+      high,
+      low,
+      contractName: prev.contractName,
+      contractNameLocal: prev.contractNameLocal,
     );
   }
 }
