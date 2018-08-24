@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:my_project/models/market_data.dart';
-
+import 'package:my_project/presentation/market_data_row.dart';
 
 class MarketDataList extends StatelessWidget {
   final List<MarketData> marketDataList;
@@ -17,7 +17,7 @@ class MarketDataList extends StatelessWidget {
       itemBuilder: (BuildContext context, int index) {
         final marketData = marketDataList[index];
 
-        return Text(marketData.name);
+        return MarketDataRow(marketData);
       },
     );
   }

@@ -7,7 +7,6 @@ import 'package:my_project/reducers/app_state_reducer.dart';
 import 'package:my_project/routes.dart';
 import 'package:my_project/presentation/market_data_screen.dart';
 
-
 void main() {
   runApp(FxbMarketDataApp());
 }
