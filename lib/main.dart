@@ -23,7 +23,7 @@ class FxbMarketDataApp extends StatelessWidget {
       store: store,
       child: MaterialApp(
         title: 'My App',
-        theme: ThemeData.dark(),
+        theme: ThemeData.light(),
         routes: {
           FxbMarketDataRoutes.home: (BuildContext context) {
             return StoreBuilder<AppState>(
