@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 
 import 'package:my_project/models/app_store.dart';
+import 'package:my_project/localizations.dart';
 import 'package:my_project/reducers/app_state_reducer.dart';
 import 'package:my_project/routes.dart';
 import 'package:my_project/presentation/market_data_screen.dart';
@@ -22,8 +23,16 @@ class FxbMarketDataApp extends StatelessWidget {
     return StoreProvider(
       store: store,
       child: MaterialApp(
-        title: 'My App',
+        title: AppLocalizations().appTitle,
         theme: ThemeData.light(),
+        localizationsDelegates: [
+          AppLocalizationsDelegate(),
+        ],
+        supportedLocales: [
+          const Locale('zh', 'CN'),
+          const Locale('zh', 'HK'),
+          const Locale('en', 'US'),
+        ],
         routes: {
           FxbMarketDataRoutes.home: (BuildContext context) {
             return StoreBuilder<AppState>(

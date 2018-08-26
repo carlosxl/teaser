@@ -12,11 +12,11 @@ class AppState {
 
   factory AppState.initial() => AppState(
         marketDataList: [
-          MarketData('EURUSD', '欧元美元', 1.23000, 1.10000, digits: 5),
-          MarketData('EURUSD', '欧元美元', 1.04000, 1.10000, digits: 5),
-          MarketData('EURUSD', '欧元美元', 1.06000, 1.10000, digits: 5),
-          MarketData('EURUSD', '欧元美元', 1.00000, 1.10000, digits: 5),
-          MarketData('EURUSD', '欧元美元', 1.00000, 1.10000, digits: 5),
+          MarketData('EURUSD', '欧元美元', digits: 5),
+          MarketData('EURUSD', '欧元美元', digits: 5),
+          MarketData('EURUSD', '欧元美元', digits: 5),
+          MarketData('EURUSD', '欧元美元', digits: 5),
+          MarketData('EURUSD', '欧元美元', digits: 5),
         ],
       );
 }

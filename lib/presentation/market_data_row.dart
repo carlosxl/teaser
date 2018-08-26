@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:my_project/models/market_data.dart';
+import 'package:my_project/localizations.dart';
 
 class MarketDataRow extends StatelessWidget {
   static final _nameTextStyle = TextStyle(
@@ -20,6 +21,18 @@ class MarketDataRow extends StatelessWidget {
   final MarketData data;
 
   MarketDataRow(this.data);
+
+  Color get priceColor {
+    switch (data.priceChange) {
+      case PriceChange.Increased:
+        return Colors.red;
+      case PriceChange.Decreased:
+        return Colors.green;
+      case PriceChange.NotChanged:
+        return Colors.grey;
+    }
+    return Colors.grey;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,9 +64,9 @@ class MarketDataRow extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
-                  _ZoomedPrice(data.bid, data.digits),
+                  _ZoomedPrice(data.bid, data.digits, priceColor),
                   Text(
-                    '最低价：' + data.low.toStringAsFixed(data.digits),
+                    AppLocalizations.of(context).highPrice + data.low.toStringAsFixed(data.digits),
                     style: _highLowTextStyle,
                   ),
                 ],
@@ -64,9 +77,9 @@ class MarketDataRow extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
-                  _ZoomedPrice(data.ask, data.digits),
+                  _ZoomedPrice(data.ask, data.digits, priceColor),
                   Text(
-                    '最高价：' + data.high.toStringAsFixed(data.digits),
+                    AppLocalizations.of(context).lowPrice + data.high.toStringAsFixed(data.digits),
                     style: _highLowTextStyle,
                   ),
                 ],
@@ -86,12 +99,12 @@ class _ZoomedPrice extends StatelessWidget {
   static final double fontSizeZoomed = 28.0;
 
   // TODO: work on this.
-  static final Color color = Colors.red;
 
   final double price;
   final int digits;
+  final Color color;
 
-  _ZoomedPrice(this.price, this.digits);
+  _ZoomedPrice(this.price, this.digits, this.color);
 
   String get priceStr {
     return price.toStringAsFixed(digits);

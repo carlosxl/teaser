@@ -1,0 +1,22 @@
+{
+  "My App": "我的應用",
+  "@My App": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "金汇行情": "金匯行情",
+  "@金汇行情": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "最高价": "最高價：",
+  "@最高价": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "最低价": "最低價：",
+  "@最低价": {
+    "type": "text",
+    "placeholders": {}
+  }
+}
