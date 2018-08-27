@@ -1,9 +1,19 @@
+import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:my_project/models/market_data.dart';
 import 'package:my_project/localizations.dart';
 
-class MarketDataRow extends StatelessWidget {
+
+class MarketDataRow extends StatefulWidget {
+  final MarketData data;
+
+  MarketDataRow(this.data);
+
+  _RowState createState() => _RowState(data);
+}
+
+class _RowState extends State<MarketDataRow> with SingleTickerProviderStateMixin {
   static final _nameTextStyle = TextStyle(
     fontSize: 18.0,
     color: Colors.black,
@@ -18,9 +28,12 @@ class MarketDataRow extends StatelessWidget {
     color: Colors.black,
   );
 
+  Animation<Color> animation;
+  AnimationController controller;
+
   final MarketData data;
 
-  MarketDataRow(this.data);
+  _RowState(this.data);
 
   Color get priceColor {
     switch (data.priceChange) {
@@ -32,6 +45,19 @@ class MarketDataRow extends StatelessWidget {
         return Colors.grey;
     }
     return Colors.grey;
+  }
+
+  initState() {
+    super.initState();
+    controller = AnimationController(
+        duration: const Duration(milliseconds: 200), vsync: this);
+    animation = ColorTween(begin: Colors.grey, end: Colors.red).animate(controller)
+      ..addListener(() {
+        setState(() {
+          // the state that has changed here is the animation object’s value
+        });
+      });
+    controller.forward();
   }
 
   @override
@@ -64,7 +90,7 @@ class MarketDataRow extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
-                  _ZoomedPrice(data.bid, data.digits, priceColor),
+                  _ZoomedPrice(data.bid, data.digits, animation.value),
                   Text(
                     AppLocalizations.of(context).highPrice + data.low.toStringAsFixed(data.digits),
                     style: _highLowTextStyle,
@@ -77,7 +103,7 @@ class MarketDataRow extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
-                  _ZoomedPrice(data.ask, data.digits, priceColor),
+                  _ZoomedPrice(data.ask, data.digits, animation.value),
                   Text(
                     AppLocalizations.of(context).lowPrice + data.high.toStringAsFixed(data.digits),
                     style: _highLowTextStyle,
@@ -89,6 +115,11 @@ class MarketDataRow extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  dispose() {
+    controller.dispose();
+    super.dispose();
   }
 }
 
