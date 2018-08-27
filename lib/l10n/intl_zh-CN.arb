@@ -1,0 +1,12 @@
+{
+  "My App": "我的应用",
+  "@My App": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "金汇行情": "金汇行情",
+  "@金汇行情": {
+    "type": "text",
+    "placeholders": {}
+  }
+}

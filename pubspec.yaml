@@ -2,7 +2,12 @@ name: my_project
 description: A new Flutter project.
 
 dependencies:
+  intl: ^0.15.6
+
   flutter:
+    sdk: flutter
+
+  flutter_localizations:
     sdk: flutter
 
   flutter_redux: ^0.5.2
@@ -14,6 +19,12 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  intl_translation:
+
+transformers:
+  - intl_translation:
+    $include: lib/localizations.dart
 
 
 # For information on the generic Dart part of this file, see the
