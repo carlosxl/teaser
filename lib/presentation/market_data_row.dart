@@ -1,19 +1,9 @@
-import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:my_project/models/market_data.dart';
 import 'package:my_project/localizations.dart';
 
-
-class MarketDataRow extends StatefulWidget {
-  final MarketData data;
-
-  MarketDataRow(this.data);
-
-  _RowState createState() => _RowState(data);
-}
-
-class _RowState extends State<MarketDataRow> with SingleTickerProviderStateMixin {
+class MarketDataRow extends StatelessWidget {
   static final _nameTextStyle = TextStyle(
     fontSize: 18.0,
     color: Colors.black,
@@ -28,12 +18,9 @@ class _RowState extends State<MarketDataRow> with SingleTickerProviderStateMixin
     color: Colors.black,
   );
 
-  Animation<Color> animation;
-  AnimationController controller;
-
   final MarketData data;
 
-  _RowState(this.data);
+  MarketDataRow(this.data);
 
   Color get priceColor {
     switch (data.priceChange) {
@@ -45,19 +32,6 @@ class _RowState extends State<MarketDataRow> with SingleTickerProviderStateMixin
         return Colors.grey;
     }
     return Colors.grey;
-  }
-
-  initState() {
-    super.initState();
-    controller = AnimationController(
-        duration: const Duration(milliseconds: 200), vsync: this);
-    animation = ColorTween(begin: Colors.grey, end: Colors.red).animate(controller)
-      ..addListener(() {
-        setState(() {
-          // the state that has changed here is the animation object’s value
-        });
-      });
-    controller.forward();
   }
 
   @override
@@ -90,9 +64,10 @@ class _RowState extends State<MarketDataRow> with SingleTickerProviderStateMixin
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
-                  _ZoomedPrice(data.bid, data.digits, animation.value),
+                  _ZoomedPrice(data.bid, data.digits, priceColor),
                   Text(
-                    AppLocalizations.of(context).highPrice + data.low.toStringAsFixed(data.digits),
+                    AppLocalizations.of(context).highPrice +
+                        data.low.toStringAsFixed(data.digits),
                     style: _highLowTextStyle,
                   ),
                 ],
@@ -103,9 +78,10 @@ class _RowState extends State<MarketDataRow> with SingleTickerProviderStateMixin
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
-                  _ZoomedPrice(data.ask, data.digits, animation.value),
+                  _ZoomedPrice(data.ask, data.digits, priceColor),
                   Text(
-                    AppLocalizations.of(context).lowPrice + data.high.toStringAsFixed(data.digits),
+                    AppLocalizations.of(context).lowPrice +
+                        data.high.toStringAsFixed(data.digits),
                     style: _highLowTextStyle,
                   ),
                 ],
@@ -115,11 +91,6 @@ class _RowState extends State<MarketDataRow> with SingleTickerProviderStateMixin
         ),
       ),
     );
-  }
-
-  dispose() {
-    controller.dispose();
-    super.dispose();
   }
 }
 

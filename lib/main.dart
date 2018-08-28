@@ -35,12 +35,8 @@ class FxbMarketDataApp extends StatelessWidget {
         ],
         routes: {
           FxbMarketDataRoutes.home: (BuildContext context) {
-            return StoreBuilder<AppState>(
-              builder: (context, store) {
-                return MarketDataScreen();
-              },
-            );
-          }
+            return MarketDataScreen();
+          },
         },
       ),
     );

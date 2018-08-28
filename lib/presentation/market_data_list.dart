@@ -15,9 +15,7 @@ class MarketDataList extends StatelessWidget {
     return ListView.builder(
       itemCount: marketDataList.length,
       itemBuilder: (BuildContext context, int index) {
-        final marketData = marketDataList[index];
-
-        return MarketDataRow(marketData);
+        return MarketDataRow(marketDataList[index]);
       },
     );
   }
