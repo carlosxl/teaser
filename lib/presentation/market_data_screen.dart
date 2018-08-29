@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
-import 'package:my_project/actions/actions.dart';
 import 'package:my_project/containers/market_data.dart';
 import 'package:my_project/localizations.dart';
 import 'package:my_project/models/app_store.dart';
 
 class MarketDataScreen extends StatelessWidget {
+  final onFloatingActionButtonPressed;
+
+  MarketDataScreen({this.onFloatingActionButtonPressed});
+
   @override
   Widget build(BuildContext context) {
     return StoreBuilder<AppState>(
@@ -18,7 +21,7 @@ class MarketDataScreen extends StatelessWidget {
           body: MarketDataBox(),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              store.dispatch(RefreshAction());
+              onFloatingActionButtonPressed();
             },
             child: Icon(Icons.refresh),
           ),

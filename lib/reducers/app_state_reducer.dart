@@ -18,10 +18,6 @@ AppState _refresh(AppState state, RefreshAction action) {
     marketDataList: state.marketDataList.map((data) {
       if (rg.nextBool()) {
         double diff = tickWidth * (rg.nextDouble() - 0.5);
-        PriceChange priceChange = diff == 0.0
-            ? PriceChange.NotChanged
-            : diff > 0 ? PriceChange.Increased : PriceChange.NotChanged;
-
         return MarketData.fromPrev(data, diff);
       }
       return MarketData.fromPrev(data, 0.0);

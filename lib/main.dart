@@ -2,6 +2,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 
+import 'package:my_project/actions/actions.dart';
 import 'package:my_project/models/app_store.dart';
 import 'package:my_project/localizations.dart';
 import 'package:my_project/reducers/app_state_reducer.dart';
@@ -20,6 +21,10 @@ class FxbMarketDataApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var onRefresh = () {
+      store.dispatch(RefreshAction());
+    };
+
     return StoreProvider(
       store: store,
       child: MaterialApp(
@@ -35,7 +40,7 @@ class FxbMarketDataApp extends StatelessWidget {
         ],
         routes: {
           FxbMarketDataRoutes.home: (BuildContext context) {
-            return MarketDataScreen();
+            return MarketDataScreen(onFloatingActionButtonPressed: onRefresh);
           },
         },
       ),
