@@ -6,9 +6,9 @@ import 'package:my_project/localizations.dart';
 import 'package:my_project/models/app_store.dart';
 
 class MarketDataScreen extends StatelessWidget {
-  final onFloatingActionButtonPressed;
+  final onRefresh;
 
-  MarketDataScreen({this.onFloatingActionButtonPressed});
+  MarketDataScreen({this.onRefresh});
 
   @override
   Widget build(BuildContext context) {
@@ -18,11 +18,12 @@ class MarketDataScreen extends StatelessWidget {
           appBar: AppBar(
             title: Text(AppLocalizations.of(context).title),
           ),
-          body: MarketDataBox(),
+          body: RefreshIndicator(
+            onRefresh: onRefresh,
+            child: MarketDataBox(),
+          ),
           floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              onFloatingActionButtonPressed();
-            },
+            onPressed: () => {},
             child: Icon(Icons.refresh),
           ),
         );

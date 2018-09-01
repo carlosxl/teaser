@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 
 import 'package:my_project/actions/actions.dart';
-import 'package:my_project/models/app_store.dart';
 import 'package:my_project/localizations.dart';
+import 'package:my_project/middleware/app_state_middleware.dart';
+import 'package:my_project/models/app_store.dart';
+import 'package:my_project/presentation/market_data_screen.dart';
 import 'package:my_project/reducers/app_state_reducer.dart';
 import 'package:my_project/routes.dart';
-import 'package:my_project/presentation/market_data_screen.dart';
 
 void main() {
   runApp(FxbMarketDataApp());
@@ -17,13 +18,17 @@ class FxbMarketDataApp extends StatelessWidget {
   final store = Store<AppState>(
     appStateReducer,
     initialState: AppState.initial(),
+    middleware: appStateMiddleware,
   );
 
   @override
   Widget build(BuildContext context) {
-    var onRefresh = () {
-      store.dispatch(RefreshAction());
-    };
+    onRefresh () async {
+      final CompletableAction action = CompletableAction();
+      store.dispatch(action);
+
+      return action.completer.future;
+    }
 
     return StoreProvider(
       store: store,
@@ -40,7 +45,7 @@ class FxbMarketDataApp extends StatelessWidget {
         ],
         routes: {
           FxbMarketDataRoutes.home: (BuildContext context) {
-            return MarketDataScreen(onFloatingActionButtonPressed: onRefresh);
+            return MarketDataScreen(onRefresh: onRefresh);
           },
         },
       ),

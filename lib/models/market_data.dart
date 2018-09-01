@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:meta/meta.dart';
 
 enum PriceChange { Increased, Decreased, NotChanged }
@@ -16,26 +18,30 @@ class MarketData {
   MarketData(
     this.name,
     this.nameLocal, {
-    this.bid = 1.0,
-    this.ask = 1.0,
-    this.high = 1.0,
-    this.low = 1.0,
+    bid,
+    ask,
+    high,
+    low,
     this.digits = 5,
     this.priceChange = PriceChange.NotChanged,
-  });
+  })  : this.bid = bid ?? pow(10, 5 - digits).toDouble(),
+        this.ask = ask ?? pow(10, 5 - digits).toDouble(),
+        this.high = high ?? pow(10, 5 - digits).toDouble(),
+        this.low = low ?? pow(10, 5 - digits).toDouble();
 
-  factory MarketData.fromPrev(MarketData prev, double diff) {
-    PriceChange priceChange = diff == 0
-            ? PriceChange.NotChanged
-            : diff > 0 ? PriceChange.Increased : PriceChange.Decreased;
+  factory MarketData.fromPrev(MarketData prev, double ratio) {
+    PriceChange priceChange = ratio == 1
+        ? PriceChange.NotChanged
+        : ratio > 1 ? PriceChange.Increased : PriceChange.Decreased;
 
     return MarketData(
       prev.name,
       prev.nameLocal,
-      bid: prev.bid + diff,
-      ask: prev.ask + diff,
-      high: (prev.ask + diff) > prev.high ? prev.ask + diff : prev.high,
-      low: (prev.bid + diff) < prev.high ? prev.bid + diff : prev.low,
+      bid: prev.bid * ratio,
+      ask: prev.ask * ratio,
+      high: (prev.ask * ratio) > prev.high ? prev.ask * ratio : prev.high,
+      low: (prev.bid * ratio) < prev.high ? prev.bid * ratio : prev.low,
+      digits: prev.digits,
       priceChange: priceChange,
     );
   }
