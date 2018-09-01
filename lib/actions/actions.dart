@@ -15,3 +15,11 @@ class ReorderAction {
 
   ReorderAction(this.oldIndex, this.newIndex);
 }
+
+/// Toggle the `isVisible` value of a MarketData instance identified by its `name`.
+class ToggleVisibilityAction {
+  final String name;
+  final bool value;
+
+  ToggleVisibilityAction(this.name, this.value);
+}

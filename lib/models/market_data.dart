@@ -14,6 +14,7 @@ class MarketData {
   final double low;
   final int digits;
   final PriceChange priceChange;
+  final bool isVisible;
 
   MarketData(
     this.name,
@@ -24,6 +25,7 @@ class MarketData {
     low,
     this.digits = 5,
     this.priceChange = PriceChange.NotChanged,
+    this.isVisible = true,
   })  : this.bid = bid ?? pow(10, 5 - digits).toDouble(),
         this.ask = ask ?? pow(10, 5 - digits).toDouble(),
         this.high = high ?? pow(10, 5 - digits).toDouble(),
@@ -43,6 +45,29 @@ class MarketData {
       low: (prev.bid * ratio) < prev.high ? prev.bid * ratio : prev.low,
       digits: prev.digits,
       priceChange: priceChange,
+      isVisible: prev.isVisible,
+    );
+  }
+
+  MarketData copyWith({
+    double bid,
+    double ask,
+    double high,
+    double low,
+    int digits,
+    PriceChange priceChange,
+    bool isVisible,
+  }) {
+    return MarketData(
+      this.name,
+      this.nameLocal,
+      bid: bid ?? this.bid,
+      ask: ask ?? this.ask,
+      high: high ?? this.high,
+      low: low ?? this.low,
+      digits: digits ?? this.digits,
+      priceChange: priceChange ?? this.priceChange,
+      isVisible: isVisible ?? this.isVisible,
     );
   }
 }

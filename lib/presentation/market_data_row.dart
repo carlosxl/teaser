@@ -41,56 +41,59 @@ class MarketDataRow extends StatelessWidget {
     return Container(
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 5.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: <Widget>[
-            Container(
-              width: witdh_40,
-              padding: EdgeInsets.symmetric(horizontal: 15.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    data.name,
-                    style: _nameTextStyle,
-                  ),
-                  Text(
-                    data.nameLocal,
-                    style: _nameLocalTextStyle,
-                  ),
-                ],
+        child: InkWell(
+          onTap: () => {},
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              Container(
+                width: witdh_40,
+                padding: EdgeInsets.symmetric(horizontal: 15.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      data.name,
+                      style: _nameTextStyle,
+                    ),
+                    Text(
+                      data.nameLocal,
+                      style: _nameLocalTextStyle,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 15.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  _ZoomedPrice(data.bid, data.digits, priceColor),
-                  Text(
-                    AppLocalizations.of(context).highPrice +
-                        data.low.toStringAsFixed(data.digits),
-                    style: _highLowTextStyle,
-                  ),
-                ],
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 15.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    _ZoomedPrice(data.bid, data.digits, priceColor),
+                    Text(
+                      AppLocalizations.of(context).highPrice +
+                          data.low.toStringAsFixed(data.digits),
+                      style: _highLowTextStyle,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 15.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  _ZoomedPrice(data.ask, data.digits, priceColor),
-                  Text(
-                    AppLocalizations.of(context).lowPrice +
-                        data.high.toStringAsFixed(data.digits),
-                    style: _highLowTextStyle,
-                  ),
-                ],
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 15.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    _ZoomedPrice(data.ask, data.digits, priceColor),
+                    Text(
+                      AppLocalizations.of(context).lowPrice +
+                          data.high.toStringAsFixed(data.digits),
+                      style: _highLowTextStyle,
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

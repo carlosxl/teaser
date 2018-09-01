@@ -12,10 +12,12 @@ class MarketDataList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<MarketData> list =
+        marketDataList.where((data) => data.isVisible).toList();
     return ListView.builder(
-      itemCount: marketDataList.length,
+      itemCount: list.length,
       itemBuilder: (BuildContext context, int index) {
-        return MarketDataRow(marketDataList[index]);
+        return MarketDataRow(list[index]);
       },
     );
   }

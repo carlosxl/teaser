@@ -4,7 +4,7 @@ import 'package:redux/redux.dart';
 
 import 'package:my_project/actions/actions.dart';
 import 'package:my_project/models/app_store.dart';
-import 'package:my_project/models/market_data.dart';
+import 'package:my_project/presentation/edit_list_row.dart';
 
 class EditListBox extends StatelessWidget {
   @override
@@ -22,23 +22,16 @@ class EditListBox extends StatelessWidget {
   }
 
   List<Widget> _buildList(BuildContext context, Store<AppState> store) {
+    onToggle(String name, bool value) {
+      store.dispatch(ToggleVisibilityAction(name, value));
+    }
+
     return store.state.marketDataList
-        .map((data) => EditListRow(key: Key(data.name), data: data))
+        .map((data) => EditListRow(
+              key: Key(data.name),
+              data: data,
+              onToggle: onToggle,
+            ))
         .toList();
-  }
-}
-
-class EditListRow extends StatelessWidget {
-  final MarketData data;
-
-  EditListRow({Key key, this.data}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(data.name),
-      trailing: Icon(Icons.reorder),
-      onTap: () => {},
-    );
   }
 }
