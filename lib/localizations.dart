@@ -21,6 +21,10 @@ class AppLocalizations {
         '金汇行情',
       );
 
+  String get editTitle => Intl.message(
+        '编辑行情列表',
+      );
+
   String get highPrice => Intl.message(
         '最高价',
       );

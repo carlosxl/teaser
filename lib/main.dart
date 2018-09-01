@@ -6,6 +6,7 @@ import 'package:my_project/actions/actions.dart';
 import 'package:my_project/localizations.dart';
 import 'package:my_project/middleware/app_state_middleware.dart';
 import 'package:my_project/models/app_store.dart';
+import 'package:my_project/presentation/edit_list_screen.dart';
 import 'package:my_project/presentation/market_data_screen.dart';
 import 'package:my_project/reducers/app_state_reducer.dart';
 import 'package:my_project/routes.dart';
@@ -23,7 +24,7 @@ class FxbMarketDataApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    onRefresh () async {
+    onRefresh() {
       final CompletableAction action = CompletableAction();
       store.dispatch(action);
 
@@ -44,8 +45,11 @@ class FxbMarketDataApp extends StatelessWidget {
           const Locale('en', 'US'),
         ],
         routes: {
-          FxbMarketDataRoutes.home: (BuildContext context) {
+          AppRoutes.home: (BuildContext context) {
             return MarketDataScreen(onRefresh: onRefresh);
+          },
+          AppRoutes.edit: (BuildContext context) {
+            return EditListScreen();
           },
         },
       ),

@@ -9,6 +9,7 @@ const double tickWidth = 0.001;  // average tick price change is 0.1%.
 
 final appStateReducer = combineReducers<AppState>([
   TypedReducer<AppState, RefreshAction>(_refresh),
+  TypedReducer<AppState, ReorderAction>(_reorder),
 ]);
 
 // TODO: This funciton should take async market data from API return.
@@ -24,4 +25,18 @@ AppState _refresh(AppState state, RefreshAction action) {
       return MarketData.fromPrev(data, 1.0);
     }).toList(),
   );
+}
+
+AppState _reorder(AppState state, ReorderAction action) {
+  int oldIndex = action.oldIndex;
+  int newIndex = action.newIndex;
+
+  if (oldIndex < newIndex) {
+    newIndex -= 1;
+  }
+
+  final List<MarketData> list = state.marketDataList;
+  final MarketData data = list.removeAt(oldIndex);
+  list.insert(newIndex, data);
+  return AppState(marketDataList: list);
 }

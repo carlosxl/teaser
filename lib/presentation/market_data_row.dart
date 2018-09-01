@@ -36,6 +36,8 @@ class MarketDataRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double witdh_40 = MediaQuery.of(context).size.width * 0.4;
+
     return Container(
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 5.0),
@@ -44,7 +46,8 @@ class MarketDataRow extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
             Container(
-              padding: EdgeInsets.only(left: 15.0),
+              width: witdh_40,
+              padding: EdgeInsets.symmetric(horizontal: 15.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -60,7 +63,7 @@ class MarketDataRow extends StatelessWidget {
               ),
             ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 30.0),
+              padding: EdgeInsets.symmetric(horizontal: 15.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
