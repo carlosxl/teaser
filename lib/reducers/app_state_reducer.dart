@@ -11,6 +11,7 @@ final appStateReducer = combineReducers<AppState>([
   TypedReducer<AppState, RefreshAction>(_refresh),
   TypedReducer<AppState, ReorderAction>(_reorder),
   TypedReducer<AppState, ToggleVisibilityAction>(_toggleVisibility),
+  TypedReducer<AppState, BatchEditAction>(_batchEditList),
 ]);
 
 // TODO: This funciton should take async market data from API return.
@@ -49,4 +50,21 @@ AppState _toggleVisibility(AppState state, ToggleVisibilityAction action) {
   list[index] = data.copyWith(isVisible: !data.isVisible);
 
   return AppState(marketDataList: list);
+}
+
+AppState _batchEditList(AppState state, BatchEditAction action) {
+  const visibleMap = <BatchEditType, bool>{
+    BatchEditType.ShowAll: true,
+    BatchEditType.HideAll: false,
+  };
+  final bool isVisible = visibleMap[action.type];
+
+  return AppState(
+    marketDataList: state.marketDataList.map((data) {
+      if (data.isVisible == isVisible) {
+        return data;
+      }
+      return data.copyWith(isVisible: isVisible);
+    }).toList(),
+  );
 }

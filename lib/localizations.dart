@@ -32,6 +32,14 @@ class AppLocalizations {
   String get lowPrice => Intl.message(
         '最低价',
       );
+
+  String get showAll => Intl.message(
+        '全部显示',
+      );
+
+  String get hideAll => Intl.message(
+        '全部隐藏',
+      );
 }
 
 class AppLocalizationsDelegate

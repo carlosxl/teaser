@@ -23,3 +23,11 @@ class ToggleVisibilityAction {
 
   ToggleVisibilityAction(this.name, this.value);
 }
+
+enum BatchEditType { ShowAll, HideAll }
+
+class BatchEditAction {
+  final BatchEditType type;
+
+  BatchEditAction(this.type);
+}
