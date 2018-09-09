@@ -30,11 +30,7 @@ class MarketDataScreen extends StatelessWidget {
           body: RefreshIndicator(
             onRefresh: onRefresh,
             child: MarketDataBox(),
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () => {},
-            child: Icon(Icons.refresh),
-          ),
+         )
         );
       },
     );

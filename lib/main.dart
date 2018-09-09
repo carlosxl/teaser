@@ -1,3 +1,4 @@
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
@@ -38,6 +39,8 @@ class FxbMarketDataApp extends StatelessWidget {
         theme: ThemeData.light(),
         localizationsDelegates: [
           AppLocalizationsDelegate(),
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
         ],
         supportedLocales: [
           const Locale('zh', 'CN'),
@@ -45,12 +48,8 @@ class FxbMarketDataApp extends StatelessWidget {
           const Locale('en', 'US'),
         ],
         routes: {
-          AppRoutes.home: (BuildContext context) {
-            return MarketDataScreen(onRefresh: onRefresh);
-          },
-          AppRoutes.edit: (BuildContext context) {
-            return EditListScreen();
-          },
+          AppRoutes.home: (context) =>  MarketDataScreen(onRefresh: onRefresh),
+          AppRoutes.edit: (context) => EditListScreen(),
         },
       ),
     );
