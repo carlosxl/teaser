@@ -48,7 +48,7 @@ class FxbMarketDataApp extends StatelessWidget {
           const Locale('en', 'US'),
         ],
         routes: {
-          AppRoutes.home: (context) =>  MarketDataScreen(onRefresh: onRefresh),
+          AppRoutes.home: (context) => MarketDataScreen(onRefresh: onRefresh),
           AppRoutes.edit: (context) => EditListScreen(),
         },
       ),
