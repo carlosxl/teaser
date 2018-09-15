@@ -22,6 +22,9 @@ dev_dependencies:
 
   intl_translation:
 
+  redux_dev_tools:
+  flutter_redux_dev_tools:
+
 transformers:
   - intl_translation:
     $include: lib/localizations.dart
